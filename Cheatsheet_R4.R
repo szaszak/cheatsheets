@@ -35,3 +35,38 @@ options(max.print = 3000)
 
 # Referência de REGEX
 # https://unicode-org.github.io/icu/userguide/strings/regexp.html
+
+
+# Arrow
+# Instalar
+Sys.setenv("NOT_CRAN" = "true")
+install.packages("arrow")
+library('arrow')
+
+# Abrir arquivos
+lala <- list.files(pasta_uni_out, pattern = '.parquet', full.names = TRUE, recursive = FALSE)
+lala <- open_dataset(lala)
+
+as.data.frame((Scanner$create(lala)$ToTable()))
+schema(lala)
+
+lala1 <- open_dataset(lala[1])
+lala2 <- open_dataset(lala[2])
+
+# Pré-processamentos para abrir arquivos
+lala1 %>%
+  left_join(lala2, by = 'cd_setor') %>%
+  select(cd_setor, V0001, V01021) %>%
+  collect()
+
+# supported: select(), rename(), filter(), arrange(), group_by()
+# not supported yet: summarize() or mutate() -> must collect() first
+this %>% 
+  filter(str_starts(CD_GEOCODI, '35503085200000') & COD_ESPECIE %in% c(1, 2)) %>% 
+  compute() %>% 
+  select(CD_GEOCODI, lat, lon) %>% 
+  collect() %>% 
+  st_as_sf(coords = c('lon', 'lat'), crs = 4326) %>% mapview(cex = 1)
+  
+# Gravar parquet
+write_parquet(arq_uf, 'out_file.parquet')
