@@ -156,3 +156,35 @@ df %>% mutate_all(., ~replace(., is.na(.), 0))
 
 # Criar coluna de total a partir de colunas que correspondem a um padrão
 df %>% mutate(total = rowSums(across(starts_with("classe_"))))
+
+
+# Funções - reconhecer variáveis como input
+
+# Filtra dataframe e agrupa resultados por uma variável (por padrão, ANOOBITO)
+agrupar <- function(df, filter_expr, group_var = expr(ANOOBITO), n_col = 'n') {
+  df %>% 
+    filter(!!filter_expr) %>% 
+    group_by(!!group_var) %>%
+    tally() %>% 
+    ungroup() %>% 
+    rename(!!n_col := n)
+}
+f_expr <- expr(str_starts(CAUSABAS, 'Y32'))
+f_expr <- expr(str_starts(CAUSABAS, 'Y32') | str_starts(CAUSABAS, 'Y1'))
+agrupar(sim_sus, f_expr, n_col = 'y32')
+
+# Função com group_by reconhecendo coluna como input
+estatisticas_descritivas_vg <- function(var) {
+  # Descrição das variáveis categóricas - uma por vez, agrupado por viagem
+  # https://uc-r.github.io/descriptives_categorical
+  # https://dplyr.tidyverse.org/articles/programming.html
+  out <- 
+    base_modelo %>%
+    select(trip_id, {{var}}) %>%
+    distinct() %>%
+    group_by(across(all_of({{var}}))) %>%
+    tally() %>%
+    mutate(prop = n / sum(n) * 100)
+  
+  print(out)
+}
