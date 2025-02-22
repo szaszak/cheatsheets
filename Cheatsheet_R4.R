@@ -36,6 +36,15 @@ options(max.print = 3000)
 # Referência de REGEX
 # https://unicode-org.github.io/icu/userguide/strings/regexp.html
 
+# Arquivos .csv
+df <- read_delim(csv_file, delim = ';', # delim = "\t"
+                 locale = locale(decimal_mark = ',', grouping_mark = '.', encoding = 'latin1'), # iso_8859-1, cp850 (SAT-CET), utf-8, ascii
+                 n_max = 2, col_names = FALSE, # col_names = FALSE para arquivos sem header
+                 col_types = "cicid") # 'c'='character', 'd'='double', 'l'='logical', 'i'='integer', D = date, T = datetime
+                 # col_types = cols(.default = "c")
+
+# Salvar arquivo .csv
+write_delim(df, 'arquivo.csv', delim = ';')
 
 # Arrow
 # Instalar
@@ -79,3 +88,32 @@ dados <- read.dbf('arquivo.dbf')
 # .dbc
 library('read.dbc')
 dados <- read.dbc('arquivo.dbc')
+
+# Ler arquivos shapefile
+read_sf('arquivo.shp')
+# Shapefile com encoding windows (Pesquisa OD, Censo)
+st_read('arquivo.shp', options = "ENCODING=WINDOWS-1252") # manter sem espaçamento entre as aspas
+
+# Gravar arquivos shapefile
+st_write(sf_object, 'shapefile.shp', driver = 'ESRI Shapefile', append = FALSE)
+st_write(sf_object, 'shapefile.gpkg', driver = 'GPKG', append = FALSE)
+
+# Checar CRS
+st_crs(sf_object)$input
+
+# Padronizar os CRS para a mesma projeção
+if (st_crs(sf_object_1) != st_crs(sf_object_2)){
+    sf_object_1 <- sf_object_1 %>% st_transform(crs = st_crs(sf_object_2))
+}
+
+# Transformar dataframe em shape
+# CRS 4326 = WGS84 (degrees)
+# CRS 31983 = SIRGAS2000 UTM 23S
+# CRS 32723 = WGS84 UTM 23S
+df %>% st_as_sf(coords = c('lon', 'lat'), crs = 4326)
+
+# Checar se a geometria está ok
+shape <- shape %>% st_make_valid()
+
+# Juntar dois arquivos de shape
+sf_out <- rbind(sf_object_1, sf_object_2)
