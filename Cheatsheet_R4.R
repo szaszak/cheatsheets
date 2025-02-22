@@ -188,3 +188,19 @@ estatisticas_descritivas_vg <- function(var) {
   
   print(out)
 }
+
+# Nome da coluna passada como argumento da função
+isolar_trecho_df <- function(sel_id, trip_id_col, df){    
+    # Nome da coluna passada como argumento da função precisa ser 
+    # lido de forma específica antes que a coluna possa ser usada
+    # https://stackoverflow.com/questions/42100892/how-to-pass-a-string-to-dplyr-filter-in-a-function
+    # Ver também o help de ?QU    
+    col_name = rlang::sym(as.character(trip_id_col))
+    # col_value neste caso já é uma string
+    # col_value = as.character(sel_id)
+    df_out <- df %>% filter(!!col_name == sel_id)
+    
+    return(df_out)
+}
+isolar_trecho_df(sel_id = '28045039467d18dc5195c3553aea0fc231e890e1c5df470a75841b3c', 
+                 trip_id_col = 'tripid', df = df)
