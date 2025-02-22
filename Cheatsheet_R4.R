@@ -46,6 +46,17 @@ df <- read_delim(csv_file, delim = ';', # delim = "\t"
 # Salvar arquivo .csv
 write_delim(df, 'arquivo.csv', delim = ';')
 
+# Excel
+df <- read_excel('excel_file.xlsx')
+# Ler abas existentes no arquivo Excel
+excel_sheets('excel_file.xlsx')
+df <- read_excel('excel_file.xlsx', sheet = 'sheet_name', col_names = FALSE)
+
+# Gravar Excel
+library('openxlsx')
+write.xlsx(df, 'excel_file.xlsx')
+
+
 # Arrow
 # Instalar
 Sys.setenv("NOT_CRAN" = "true")
@@ -111,6 +122,7 @@ if (st_crs(sf_object_1) != st_crs(sf_object_2)){
 # CRS 31983 = SIRGAS2000 UTM 23S
 # CRS 32723 = WGS84 UTM 23S
 df %>% st_as_sf(coords = c('lon', 'lat'), crs = 4326)
+df %>% st_transform(4326)
 
 # Checar se a geometria está ok
 shape <- shape %>% st_make_valid()
