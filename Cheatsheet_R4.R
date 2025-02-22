@@ -129,3 +129,24 @@ shape <- shape %>% st_make_valid()
 
 # Juntar dois arquivos de shape
 sf_out <- rbind(sf_object_1, sf_object_2)
+
+
+# Atualizar factors - atualizar o NA em ID_DOM para o valor da linha seguinte (Pesquisa OD)
+# ZONA MUNI_DOM CO_DOM_X CO_DOM_Y ID_DOM  
+# <int>    <int>    <int>    <int> <fct>   
+# 1     1       36   333725  7394554 NA      
+# 2     1       36   333725  7394554 00100001
+# 3     1       36   333725  7394554 00100002
+# 4     1       36   333725  7394554 00100002
+# 5     1       36   333725  7394554 00100002
+# 6     1       36   333725  7394554 00100002
+# 7     1       36   333067  7394620 00100003
+# 8     1       36   333067  7394620 00100003
+dados %>%
+  # select(1:5) %>%
+  group_by(ZONA, MUNI_DOM) %>%
+  # Fill NAs with the first non-NA value in the group
+  mutate(ID_DOM = replace(ID_DOM, is.na(ID_DOM), first(ID_DOM[!is.na(ID_DOM)]))) %>%
+  # After filling the first NA, propagate values downward
+  # mutate(ID_DOM = zoo::na.locf(ID_DOM, fromLast = FALSE, na.rm = FALSE)) %>%
+  ungroup()
