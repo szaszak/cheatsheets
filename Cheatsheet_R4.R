@@ -70,3 +70,12 @@ this %>%
   
 # Gravar parquet
 write_parquet(arq_uf, 'out_file.parquet')
+
+
+# Ler arquivos .dbf e .dbc (Pesquisa OD, SIM-SUS)
+# .dbf
+library('foreign')
+dados <- read.dbf('arquivo.dbf')
+# .dbc
+library('read.dbc')
+dados <- read.dbc('arquivo.dbc')
