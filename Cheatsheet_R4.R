@@ -150,3 +150,9 @@ dados %>%
   # After filling the first NA, propagate values downward
   # mutate(ID_DOM = zoo::na.locf(ID_DOM, fromLast = FALSE, na.rm = FALSE)) %>%
   ungroup()
+
+# Substituir NAs por 0 em todas as colunas 
+df %>% mutate_all(., ~replace(., is.na(.), 0))
+
+# Criar coluna de total a partir de colunas que correspondem a um padrão
+df %>% mutate(total = rowSums(across(starts_with("classe_"))))
