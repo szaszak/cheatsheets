@@ -204,3 +204,13 @@ isolar_trecho_df <- function(sel_id, trip_id_col, df){
 }
 isolar_trecho_df(sel_id = '28045039467d18dc5195c3553aea0fc231e890e1c5df470a75841b3c', 
                  trip_id_col = 'tripid', df = df)
+
+# Renomear coluna
+sel_vars <- c(sprintf('classe_%d', seq(1, 6)))
+for (var in sel_vars) {
+  (...)
+  # Selecionar colunas var (ex. classe_1) e renomear as calculadas (ex. classe_1_prop_vals)
+  prop_ests <- prop_ests %>% 
+        select(!!var, prop_vals, dec_vals, int_vals) %>% 
+        rename_with(~ paste0(var, '_', .), c('prop_vals', 'dec_vals', 'int_vals'))
+  }
