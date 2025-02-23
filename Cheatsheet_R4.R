@@ -105,6 +105,13 @@ read_sf('arquivo.shp')
 # Shapefile com encoding windows (Pesquisa OD, Censo)
 st_read('arquivo.shp', options = "ENCODING=WINDOWS-1252") # manter sem espaçamento entre as aspas
 
+# Puxar colunas de lat lon a partir do geom de um sf
+hex_sp %>% 
+  st_centroid() %>% 
+  mutate(lon = st_coordinates(geom)[, 1],
+         lat = st_coordinates(geom)[, 2]) %>% 
+  st_drop_geometry()
+
 # Gravar arquivos shapefile
 st_write(sf_object, 'shapefile.shp', driver = 'ESRI Shapefile', append = FALSE)
 st_write(sf_object, 'shapefile.gpkg', driver = 'GPKG', append = FALSE)
