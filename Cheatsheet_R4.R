@@ -137,6 +137,8 @@ shape <- shape %>% st_make_valid()
 # Juntar dois arquivos de shape
 sf_out <- rbind(sf_object_1, sf_object_2)
 
+# Filtrar primeiro item de id em dataframe com repetições do id nas linhas
+df %>% group_by(id) %>% filter(row_number() == 1)
 
 # Atualizar factors - atualizar o NA em ID_DOM para o valor da linha seguinte (Pesquisa OD)
 # ZONA MUNI_DOM CO_DOM_X CO_DOM_Y ID_DOM  
