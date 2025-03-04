@@ -114,7 +114,7 @@ hex_sp %>%
 
 # Gravar arquivos shapefile
 st_write(sf_object, 'shapefile.shp', driver = 'ESRI Shapefile', append = FALSE)
-st_write(sf_object, 'shapefile.gpkg', driver = 'GPKG', append = FALSE)
+st_write(sf_object, 'shapefile.gpkg', driver = 'GPKG', append = FALSE, delete_layer = TRUE)
 
 # Checar CRS
 st_crs(sf_object)$input
