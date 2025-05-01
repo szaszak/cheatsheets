@@ -5,7 +5,9 @@
 # install.packages('sf')
 
 # Para instalar o tidyverse, o vroom pode dar problema: -Werror=format-security
-# Criar arquivo para sobrescrever o Makevars e, com isso, desconsiderar o problema como erro:
+# 1. Tentar atualizar a lib Rcpp:
+# install.packages("Rcpp")
+# 2. Criar arquivo para sobrescrever o Makevars e, com isso, desconsiderar o problema como erro:
 # mkdir -p ~/.R
 # nano ~/.R/Makevars
 # Inserir essa linha no arquivo e salvar:
