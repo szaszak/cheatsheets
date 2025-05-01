@@ -3,7 +3,18 @@
 
 # Carregar bibliotecas
 # install.packages('sf')
+
+# Para instalar o tidyverse, o vroom pode dar problema: -Werror=format-security
+# Criar arquivo para sobrescrever o Makevars e, com isso, desconsiderar o problema como erro:
+# mkdir -p ~/.R
+# nano ~/.R/Makevars
+# Inserir essa linha no arquivo e salvar:
+# CXXFLAGS = -O2 -Wall
+# install.packages("vroom", type = "source")
+# Daí em diante, a instalação do tidyverse vai funcionar
+
 library('tidyverse')
+library('tidytable')
 library('tidylog')
 library('sf')
 library('mapview')
