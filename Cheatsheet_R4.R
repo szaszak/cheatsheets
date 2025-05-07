@@ -94,13 +94,13 @@ lala1 %>%
 
 # supported: select(), rename(), filter(), arrange(), group_by()
 # not supported yet: summarize() or mutate() -> must collect() first
-this %>% 
-  filter(str_starts(CD_GEOCODI, '35503085200000') & COD_ESPECIE %in% c(1, 2)) %>% 
-  compute() %>% 
-  select(CD_GEOCODI, lat, lon) %>% 
-  collect() %>% 
+this %>%
+  filter(str_starts(CD_GEOCODI, '35503085200000') & COD_ESPECIE %in% c(1, 2)) %>%
+  compute() %>%
+  select(CD_GEOCODI, lat, lon) %>%
+  collect() %>%
   st_as_sf(coords = c('lon', 'lat'), crs = 4326) %>% mapview(cex = 1)
-  
+
 # Gravar parquet
 write_parquet(arq_uf, 'out_file.parquet')
 
@@ -119,10 +119,10 @@ read_sf('arquivo.shp')
 st_read('arquivo.shp', options = "ENCODING=WINDOWS-1252") # manter sem espaçamento entre as aspas
 
 # Puxar colunas de lat lon a partir do geom de um sf
-hex_sp %>% 
-  st_centroid() %>% 
+hex_sp %>%
+  st_centroid() %>%
   mutate(lon = st_coordinates(geom)[, 1],
-         lat = st_coordinates(geom)[, 2]) %>% 
+         lat = st_coordinates(geom)[, 2]) %>%
   st_drop_geometry()
 
 # Gravar arquivos shapefile
@@ -154,9 +154,9 @@ sf_out <- rbind(sf_object_1, sf_object_2)
 df %>% group_by(id) %>% filter(row_number() == 1)
 
 # Atualizar factors - atualizar o NA em ID_DOM para o valor da linha seguinte (Pesquisa OD)
-# ZONA MUNI_DOM CO_DOM_X CO_DOM_Y ID_DOM  
-# <int>    <int>    <int>    <int> <fct>   
-# 1     1       36   333725  7394554 NA      
+# ZONA MUNI_DOM CO_DOM_X CO_DOM_Y ID_DOM
+# <int>    <int>    <int>    <int> <fct>
+# 1     1       36   333725  7394554 NA
 # 2     1       36   333725  7394554 00100001
 # 3     1       36   333725  7394554 00100002
 # 4     1       36   333725  7394554 00100002
@@ -173,7 +173,7 @@ dados %>%
   # mutate(ID_DOM = zoo::na.locf(ID_DOM, fromLast = FALSE, na.rm = FALSE)) %>%
   ungroup()
 
-# Substituir NAs por 0 em todas as colunas 
+# Substituir NAs por 0 em todas as colunas
 df %>% mutate_all(., ~replace(., is.na(.), 0))
 
 # Criar coluna de total a partir de colunas que correspondem a um padrão
@@ -184,11 +184,11 @@ df %>% mutate(total = rowSums(across(starts_with("classe_"))))
 
 # Filtra dataframe e agrupa resultados por uma variável (por padrão, ANOOBITO)
 agrupar <- function(df, filter_expr, group_var = expr(ANOOBITO), n_col = 'n') {
-  df %>% 
-    filter(!!filter_expr) %>% 
+  df %>%
+    filter(!!filter_expr) %>%
     group_by(!!group_var) %>%
-    tally() %>% 
-    ungroup() %>% 
+    tally() %>%
+    ungroup() %>%
     rename(!!n_col := n)
 }
 f_expr <- expr(str_starts(CAUSABAS, 'Y32'))
@@ -200,31 +200,31 @@ estatisticas_descritivas_vg <- function(var) {
   # Descrição das variáveis categóricas - uma por vez, agrupado por viagem
   # https://uc-r.github.io/descriptives_categorical
   # https://dplyr.tidyverse.org/articles/programming.html
-  out <- 
+  out <-
     base_modelo %>%
     select(trip_id, {{var}}) %>%
     distinct() %>%
     group_by(across(all_of({{var}}))) %>%
     tally() %>%
     mutate(prop = n / sum(n) * 100)
-  
+
   print(out)
 }
 
 # Nome da coluna passada como argumento da função
-isolar_trecho_df <- function(sel_id, trip_id_col, df){    
-    # Nome da coluna passada como argumento da função precisa ser 
+isolar_trecho_df <- function(sel_id, trip_id_col, df){
+    # Nome da coluna passada como argumento da função precisa ser
     # lido de forma específica antes que a coluna possa ser usada
     # https://stackoverflow.com/questions/42100892/how-to-pass-a-string-to-dplyr-filter-in-a-function
-    # Ver também o help de ?QU    
+    # Ver também o help de ?QU
     col_name = rlang::sym(as.character(trip_id_col))
     # col_value neste caso já é uma string
     # col_value = as.character(sel_id)
     df_out <- df %>% filter(!!col_name == sel_id)
-    
+
     return(df_out)
 }
-isolar_trecho_df(sel_id = '28045039467d18dc5195c3553aea0fc231e890e1c5df470a75841b3c', 
+isolar_trecho_df(sel_id = '28045039467d18dc5195c3553aea0fc231e890e1c5df470a75841b3c',
                  trip_id_col = 'tripid', df = df)
 
 # Renomear coluna
@@ -232,7 +232,12 @@ sel_vars <- c(sprintf('classe_%d', seq(1, 6)))
 for (var in sel_vars) {
   (...)
   # Selecionar colunas var (ex. classe_1) e renomear as calculadas (ex. classe_1_prop_vals)
-  prop_ests <- prop_ests %>% 
-        select(!!var, prop_vals, dec_vals, int_vals) %>% 
+  prop_ests <- prop_ests %>%
+        select(!!var, prop_vals, dec_vals, int_vals) %>%
         rename_with(~ paste0(var, '_', .), c('prop_vals', 'dec_vals', 'int_vals'))
   }
+
+# Group_by e tally // Count
+df %>% group_by(x) %>% tally() %>% filter(n > 1)
+df %>% count(x) %>% filter(n > 1)
+
