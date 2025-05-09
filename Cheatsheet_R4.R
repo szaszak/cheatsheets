@@ -15,6 +15,10 @@
 # install.packages("vroom", type = "source")
 # Daí em diante, a instalação do tidyverse vai funcionar
 
+# Pacotes pré-compilados Posit Package Manager - pegar URL atualizada em:
+# https://packagemanager.posit.co/client/#/repos/cran/setup
+options(repos = c(CRAN = 'https://packagemanager.posit.co/cran/__linux__/bookworm/latest'))
+
 library('tidyverse')
 library('tidytable')
 library('tidylog')
