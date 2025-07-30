@@ -40,9 +40,7 @@ options(scipen = 999)
 # Opções - Número máximo de linhas exibidas
 options(repr.matrix.max.cols = 50)
 # Definir outras opções
-# getOption("timeout")
 # getOption("max.print")
-options(timeout = 1000)
 options(max.print = 3000)
 
 
@@ -245,3 +243,23 @@ for (var in sel_vars) {
 df %>% group_by(x) %>% tally() %>% filter(n > 1)
 df %>% count(x) %>% filter(n > 1)
 
+
+# Download de arquivos
+# getOption("timeout")
+# Aumentar tempo (segundos) para downloads grandes
+options(timeout = 1000)
+
+# Puxar arquivo PBF do OSM para o Sudeste do Brasil
+url <- 'https://download.geofabrik.de/south-america/brazil/sudeste-latest.osm.pbf'
+pbf_file <- sprintf('%s/%s', data_folder, basename(url))
+
+# Puxar tamanho do arquivo de download
+response <- httr::HEAD(url)
+download_size <- httr::headers(response)[["Content-Length"]]
+# Fazer download e checar sucesso por tamanho do arquivo
+result <- try({ download.file(url, pbf_file)} , silent = FALSE)
+if (file.size(pbf_file) == download_size) {
+  print('PBF baixado corretamente')
+} else {
+  warning('PBF não baixado por inteiro. Considere aumentar o valor do timeout para downloads grandes')
+}
