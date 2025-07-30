@@ -263,3 +263,17 @@ if (file.size(pbf_file) == download_size) {
 } else {
   warning('PBF não baixado por inteiro. Considere aumentar o valor do timeout para downloads grandes')
 }
+
+
+# Descompactar arquivos - IBGE
+# Tentar descompactar com unzip() vai dar erro devido ao uso de encodings
+# inválidos dentro dos arquivos do IBGE. O 7z consegue fazer isso no linux.
+# Em outros sistemas, deve ser possível fazer isso com o pacote 'archive':
+# https://github.com/r-lib/archive
+if (version$os == 'linux-gnu') {
+  unzip_string <- sprintf('/usr/bin/7z x -o%s -y %s', pasta_set_shps, zip_file)
+} else if (version$os == 'darwin17.0') {
+  unzip_string <- sprintf('/Volumes/Macintosh\\ HD/Users/renataeflavio/Downloads/programas/7z2301-mac/7zz x -o%s -y %s', str_replace(pasta_set_shps, ' ', '\\\\ '), str_replace(zip_file, ' ', '\\\\ '))
+}
+
+system(unzip_string)
