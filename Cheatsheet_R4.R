@@ -178,6 +178,9 @@ dados %>%
 # Substituir NAs por 0 em todas as colunas
 df %>% mutate_all(., ~replace(., is.na(.), 0))
 
+# Remover todas as colunas que só possuem valor NA
+df <- df %>% select(!where(~ all(is.na(.))))
+
 # Criar coluna de total a partir de colunas que correspondem a um padrão
 df %>% mutate(total = rowSums(across(starts_with("classe_"))))
 
