@@ -243,6 +243,8 @@ for (var in sel_vars) {
 df %>% group_by(x) %>% tally() %>% filter(n > 1)
 df %>% count(x) %>% filter(n > 1)
 
+# Obter contagem dos valores de todas as colunas
+result <- map(df, ~ count(tibble(value = .x), value))
 
 # Download de arquivos
 # getOption("timeout")
