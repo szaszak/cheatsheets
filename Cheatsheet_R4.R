@@ -200,6 +200,22 @@ dados %>%
   # mutate(ID_DOM = zoo::na.locf(ID_DOM, fromLast = FALSE, na.rm = FALSE)) %>%
   ungroup()
 
+# Unir data.tables por timestamp mais próximo
+gps <- gps %>% setDT()
+frames_ms_times <- frames_ms_times %>% setDT()
+frames_gps <- frames_ms_times[gps, roll = "nearest", on = 'datetime',
+                                # df1[df2, roll = "nearest", on = .(timestamp = timestamp_insta),
+                                # i. refers to the right table (df2)
+                                .(point_id,
+                                  timestamp_gps = i.datetime,
+                                  # x. refers to the left table in the join (df1)
+                                  timestamp_ms = x.datetime,
+                                  time_diff = abs(x.datetime - i.datetime),
+                                  latitude,
+                                  longitude,
+                                  imagepath)]
+
+
 # Substituir NAs por 0 em todas as colunas
 df %>% mutate_all(., ~replace(., is.na(.), 0))
 
