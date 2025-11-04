@@ -58,6 +58,9 @@ df <- read_delim(csv_file, delim = ';', # delim = "\t"
                  col_types = "cicid") # 'c'='character', 'd'='double', 'l'='logical', 'i'='integer', D = date, T = datetime
                  # col_types = cols(.default = "c")
 
+# Transformar em data
+df %>% mutate(limite = as.POSIXct(limite, origin = "1970-01-01"))
+
 # Salvar arquivo .csv
 write_delim(df, 'arquivo.csv', delim = ';')
 
