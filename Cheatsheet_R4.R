@@ -152,6 +152,15 @@ shape <- shape %>% st_make_valid()
 # Juntar dois arquivos de shape
 sf_out <- rbind(sf_object_1, sf_object_2)
 
+
+# Mudar caixa (case) de texto:
+# Title case
+str_to_title(top_voted[[1]])
+# Lower case
+df %>% mutate(origin2 = tolower(origin))
+# Upper case
+mutate(across(everything(), ~ toupper(.x)))
+
 # Filtrar primeiro item de id em dataframe com repetições do id nas linhas
 df %>% group_by(id) %>% filter(row_number() == 1)
 
