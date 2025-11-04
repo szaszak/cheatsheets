@@ -161,6 +161,15 @@ df %>% mutate(origin2 = tolower(origin))
 # Upper case
 mutate(across(everything(), ~ toupper(.x)))
 
+# Case_when
+df %>% mutate(dep_on_time = case_when(dep_time < sched_dep_time ~ 1,
+                                      TRUE ~ 0))
+
+df %>% mutate(cat_partido = case_when(grepl('TC', SIGLA_PARTIDO) ~ 'Em dúvida',
+                                      grepl('C', SIGLA_PARTIDO) ~ 'Esquerda (Comunistas)',
+                                      grepl('T', SIGLA_PARTIDO) ~ 'Outros (Trabalhadores)',
+                                      TRUE ~ 'Direita'))
+
 # Filtrar primeiro item de id em dataframe com repetições do id nas linhas
 df %>% group_by(id) %>% filter(row_number() == 1)
 
