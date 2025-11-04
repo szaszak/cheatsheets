@@ -204,6 +204,9 @@ dados %>%
 checkin  <- viam_t %>% filter(atividade == 'CHECKIN') %>% setDT()
 checkout <- viam_t %>% filter(atividade == 'CHECKOUT') %>% setDT()
 # df2 é o que vai manter a quantidade final de linhas
+# Valor de timestamp mais próximo (antes ou depois) -> roll = "nearest"
+# Somente valor de timestamp futuro mais próximo  -> roll = Inf
+# Somente valor de timestamp passado mais próximo -> roll = -Inf
 paired <- checkout[checkin, on = .(lacre, estacao, data), roll = "nearest",
                    # df1[df2, roll = "nearest", on = .(df1_col = df2_col),
                    .(lacre,
