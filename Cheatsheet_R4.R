@@ -155,6 +155,9 @@ shape <- shape %>% st_make_valid()
 # Juntar dois arquivos de shape
 sf_out <- rbind(sf_object_1, sf_object_2)
 
+# Separar colunas
+df %>% separate(tipo_logradouro, into = c('sigla', 'por_extenso'), sep = '( )+-[ ]?', remove = FALSE) 
+
 # Exemplos de str_extract()
 # Linha 08 - Jardim Silveira, Linha 09 - Grajaú
 # (?<= - ).+ é um lookbehind, ou seja, tudo o que estiver após ' - ' é pego pelo .+
