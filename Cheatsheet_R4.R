@@ -201,19 +201,18 @@ dados %>%
   ungroup()
 
 # Unir data.tables por timestamp mais próximo
-gps <- gps %>% setDT()
-frames_ms_times <- frames_ms_times %>% setDT()
-frames_gps <- frames_ms_times[gps, roll = "nearest", on = 'datetime',
-                                # df1[df2, roll = "nearest", on = .(timestamp = timestamp_insta),
-                                # i. refers to the right table (df2)
-                                .(point_id,
-                                  timestamp_gps = i.datetime,
-                                  # x. refers to the left table in the join (df1)
-                                  timestamp_ms = x.datetime,
-                                  time_diff = abs(x.datetime - i.datetime),
-                                  latitude,
-                                  longitude,
-                                  imagepath)]
+checkin  <- viam_t %>% filter(atividade == 'CHECKIN') %>% setDT()
+checkout <- viam_t %>% filter(atividade == 'CHECKOUT') %>% setDT()
+# df2 é o que vai manter a quantidade final de linhas
+paired <- checkout[checkin, on = .(lacre, estacao, data), roll = "nearest",
+                   # df1[df2, roll = "nearest", on = .(df1_col = df2_col),
+                   .(lacre,
+                     estacao,
+                     # i. refers to right table (df2); x. to left table (df1)
+                     checkin = i.atividade,
+                     checkin_data = i.data,
+                     checkout = x.atividade,
+                     checkout_data = x.data)]
 
 
 # Substituir NAs por 0 em todas as colunas
