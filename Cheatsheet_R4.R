@@ -61,6 +61,11 @@ df <- read_delim(csv_file, delim = ';', # delim = "\t"
 # Transformar em data
 df %>% mutate(limite = as.POSIXct(limite, origin = "1970-01-01"))
 
+# Criar colunas como NA
+df %>% mutate(this = as.numeric(NA),
+              that = as.date(NA),
+              thou = as.character(NA))
+
 # Salvar arquivo .csv
 write_delim(df, 'arquivo.csv', delim = ';')
 
