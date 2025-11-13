@@ -60,6 +60,8 @@ df <- read_delim(csv_file, delim = ';', # delim = "\t"
 
 # Transformar em data
 df %>% mutate(limite = as.POSIXct(limite, origin = "1970-01-01"))
+df %>% mutate(tempo_em_segundos = tempo_fracao_horas * 3600))
+df %>% mutate(tempo_em_segundos = tempo_fracao_dias * 86400))
 
 # Criar colunas como NA
 df %>% mutate(this = as.numeric(NA),
