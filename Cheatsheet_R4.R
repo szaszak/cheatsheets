@@ -55,11 +55,11 @@ options(max.print = 3000)
 df <- read_delim(csv_file, delim = ';', # delim = "\t"
                  locale = locale(decimal_mark = ',', grouping_mark = '.', encoding = 'latin1'), # iso_8859-1, cp850 (SAT-CET), utf-8, ascii
                  n_max = 2, col_names = FALSE, # col_names = FALSE para arquivos sem header
-                 col_types = "cicid") # 'c'='character', 'd'='double', 'l'='logical', 'i'='integer', D = date, T = datetime
+                 col_types = "cicid") # 'c'='character', 'd'='double', 'l'='logical', 'i'='integer', D = date, T = datetime, l = logical
                  # col_types = cols(.default = "c")
 
 # Transformar em data
-df %>% mutate(limite = as.POSIXct(limite, origin = "1970-01-01"))
+df %>% mutate(limite = as.POSIXct(limite, origin = "1970-01-01")) # Excel
 df %>% mutate(tempo_em_segundos = tempo_fracao_horas * 3600))
 df %>% mutate(tempo_em_segundos = tempo_fracao_dias * 86400))
 
