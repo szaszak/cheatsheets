@@ -63,6 +63,12 @@ df %>% mutate(limite = as.POSIXct(limite, origin = "1970-01-01")) # Excel
 df %>% mutate(tempo_em_segundos = tempo_fracao_horas * 3600))
 df %>% mutate(tempo_em_segundos = tempo_fracao_dias * 86400))
 
+# Comparar colunas dos dois dataframes
+setdiff(names(df1), names(df2))
+setdiff(names(df2), names(df1))
+# Colunas que existem em ambos os dataframes
+intersect(names(df1), names(df2))
+
 # Criar colunas como NA
 df %>% mutate(this = as.numeric(NA),
               that = as.date(NA),
