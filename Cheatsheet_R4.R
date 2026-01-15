@@ -213,6 +213,8 @@ df %>% mutate(estacao = str_extract(estacao, '(?<= - ).+'))
 # Mudar caixa (case) de texto:
 # Title case
 str_to_title(top_voted[[1]])
+# Sentence case
+str_to_sentence(var)
 # Lower case
 df %>% mutate(origin2 = tolower(origin))
 # Upper case
