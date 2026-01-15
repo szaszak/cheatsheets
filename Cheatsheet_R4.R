@@ -184,7 +184,26 @@ shape <- shape %>% st_make_valid()
 sf_out <- rbind(sf_object_1, sf_object_2)
 
 # Separar colunas
-df %>% separate(tipo_logradouro, into = c('sigla', 'por_extenso'), sep = '( )+-[ ]?', remove = FALSE) 
+df %>% separate(tipo_logradouro, into = c('sigla', 'por_extenso'), sep = '( )+-[ ]?', remove = FALSE)
+
+# Separar itens com delimitador em novas linhas (valores n repetem nas linhas):
+# saidas_dh_segunda     n
+# 1 Manhã                28
+# 2 Manhã, Noite          7
+
+# saidas_dh_segunda     n
+# 1 Manhã                28
+# 2 Manhã                 7
+# 3 Noite                 7
+
+df %>%
+  # Para manter valores NA, substituir por string
+  mutate(saidas_dh_segunda = replace_na(saidas_dh_segunda, "NA")) %>%
+  # Aceita REGEX, mas superseded  
+  # separate_rows(saidas_dh_segunda, sep = ",\\s*")
+  # Não aceita REGEX
+  separate_longer_delim(saidas_dh_segunda, delim = ", ")
+
 
 # Exemplos de str_extract()
 # Linha 08 - Jardim Silveira, Linha 09 - Grajaú
