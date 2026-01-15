@@ -293,7 +293,7 @@ f_expr <- expr(str_starts(CAUSABAS, 'Y32'))
 f_expr <- expr(str_starts(CAUSABAS, 'Y32') | str_starts(CAUSABAS, 'Y1'))
 agrupar(sim_sus, f_expr, n_col = 'y32')
 
-# Função com group_by reconhecendo coluna como input
+# Função com group_by reconhecendo coluna como input (variável entra como nome da variável)
 estatisticas_descritivas_vg <- function(var) {
   # Descrição das variáveis categóricas - uma por vez, agrupado por viagem
   # https://uc-r.github.io/descriptives_categorical
@@ -308,8 +308,9 @@ estatisticas_descritivas_vg <- function(var) {
 
   print(out)
 }
+estatisticas_descritivas_vg(lala)
 
-# Nome da coluna passada como argumento da função
+# Nome da coluna passada como argumento da função (variável entra como string)
 isolar_trecho_df <- function(sel_id, trip_id_col, df){
     # Nome da coluna passada como argumento da função precisa ser
     # lido de forma específica antes que a coluna possa ser usada
@@ -324,6 +325,27 @@ isolar_trecho_df <- function(sel_id, trip_id_col, df){
 }
 isolar_trecho_df(sel_id = '28045039467d18dc5195c3553aea0fc231e890e1c5df470a75841b3c',
                  trip_id_col = 'tripid', df = df)
+
+# Retorna resumo da variável, com subtotais e percentuais (variável entra como string)
+# resumir(df, 'como_soube')
+resumir <- function(df, var) {
+  col_name = rlang::sym(as.character(var))
+  df %>% group_by(!!col_name) %>% tally() %>% mutate(perc = n / sum(n))
+}
+
+# Separa variável que se repete em diferentes linhas e retorna resumo, com 
+# subtotais e percentuais (variável entra como nome da variável)
+resumir_multivalores(df, saidas_dh_segunda, delim = ', ')
+resumir_multivalores <- function(df, var, delim) {
+  df %>% 
+    group_by({{ var }}) %>% 
+    summarise(n = sum(n), .groups = "drop") %>% 
+    mutate({{ var }} := replace_na({{ var }}, "_NA_")) %>%
+    separate_longer_delim({{ var }}, delim = delim) %>% 
+    group_by({{ var }}) %>%
+    summarise(n = sum(n), .groups = "drop") %>% 
+    mutate(perc = n / sum(n))
+}
 
 # Renomear coluna
 sel_vars <- c(sprintf('classe_%d', seq(1, 6)))
