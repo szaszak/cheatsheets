@@ -231,6 +231,8 @@ df %>% mutate(cat_partido = case_when(grepl('TC', SIGLA_PARTIDO) ~ 'Em dúvida',
 
 # Filtrar primeiro item de id em dataframe com repetições do id nas linhas
 df %>% group_by(id) %>% filter(row_number() == 1)
+df %>% group_by(id) %>% slice_head(n = 1)
+df %>% group_by(id) %>% slice_tail(n = 1)
 
 # Atualizar factors - atualizar o NA em ID_DOM para o valor da linha seguinte (Pesquisa OD)
 # ZONA MUNI_DOM CO_DOM_X CO_DOM_Y ID_DOM
