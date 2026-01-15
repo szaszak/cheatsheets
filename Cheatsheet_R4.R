@@ -50,6 +50,21 @@ options(max.print = 3000)
 
 # Referência de REGEX
 # https://unicode-org.github.io/icu/userguide/strings/regexp.html
+# Any digit -	"\\d"
+# Any word char	- "\\w"
+# Any letter (Unicode) - "\\p{L}"
+# Any number (Unicode) - "\\p{N}"
+# Any letters only - "[A-Za-z]"
+# Any character - "."
+# Any whitespace (space, tab, newline, etc.) - "\\s"
+
+# REGEX quantifiers
+# *	- 0 or more
+# +	- 1 or more
+# ?	- 0 or 1
+# {n}	- Exactly n
+# {n,}	- n or more
+# {n,m}	- Between n and m
 
 # Arquivos .csv
 df <- read_delim(csv_file, delim = ';', # delim = "\t"
