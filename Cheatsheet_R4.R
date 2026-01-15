@@ -337,13 +337,13 @@ resumir <- function(df, var) {
 # subtotais e percentuais (variável entra como nome da variável)
 resumir_multivalores(df, saidas_dh_segunda, delim = ', ')
 resumir_multivalores <- function(df, var, delim) {
-  df %>% 
-    group_by({{ var }}) %>% 
-    summarise(n = sum(n), .groups = "drop") %>% 
-    mutate({{ var }} := replace_na({{ var }}, "_NA_")) %>%
-    separate_longer_delim({{ var }}, delim = delim) %>% 
+  df %>%
     group_by({{ var }}) %>%
-    summarise(n = sum(n), .groups = "drop") %>% 
+    tally() %>%
+    mutate({{ var }} := replace_na({{ var }}, "_NA_")) %>%
+    separate_longer_delim({{ var }}, delim = delim) %>%
+    group_by({{ var }}) %>%
+    summarise(n = sum(n), .groups = "drop") %>%
     mutate(perc = n / sum(n))
 }
 
