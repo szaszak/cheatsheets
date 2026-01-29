@@ -24,6 +24,7 @@ library('tidytable')
 library('tidylog')
 library('sf')
 library('mapview')
+library('leaflet')
 library('readxl')
 
 # Carregar bibliotecas - sem avisos
@@ -150,6 +151,17 @@ dados <- read.dbc('arquivo.dbc')
 read_sf('arquivo.shp')
 # Shapefile com encoding windows (Pesquisa OD, Censo)
 st_read('arquivo.shp', options = "ENCODING=WINDOWS-1252") # manter sem espaçamento entre as aspas
+
+# Ver mapa leaflet
+df %>%  
+  leaflet() %>%
+  addProviderTiles("CartoDB.Positron") %>%
+  addTiles(group = "OSM") %>%
+  addCircleMarkers(radius = 3,
+                   color = "#2b8cbe",
+                   fillOpacity = 0.8,
+                   stroke = FALSE) %>% 
+  addLayersControl(baseGroups = c("OSM", "Positron"))
 
 # Puxar colunas de lat lon a partir do geom de um sf
 hex_sp %>%
