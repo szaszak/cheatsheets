@@ -155,13 +155,16 @@ st_read('arquivo.shp', options = "ENCODING=WINDOWS-1252") # manter sem espaçame
 # Ver mapa leaflet
 df %>%  
   leaflet() %>%
-  addProviderTiles("CartoDB.Positron") %>%
-  addTiles(group = "OSM") %>%
+  addProviderTiles("CartoDB.Positron", group = "Positron") %>%
+  addProviderTiles("OpenStreetMap", group = "OSM") %>%
   addCircleMarkers(radius = 3,
                    color = "#2b8cbe",
                    fillOpacity = 0.8,
                    stroke = FALSE) %>% 
-  addLayersControl(baseGroups = c("OSM", "Positron"))
+  addLayersControl(
+    baseGroups = c("Positron", "OSM"),
+    options = layersControlOptions(collapsed = FALSE)
+  )
 
 # Puxar colunas de lat lon a partir do geom de um sf
 hex_sp %>%
