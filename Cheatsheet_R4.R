@@ -219,6 +219,9 @@ df %>%
   # Não aceita REGEX
   separate_longer_delim(saidas_dh_segunda, delim = ", ")
 
+# Remover trailing spaces e espaços internos às strings
+df %>% mutate(across(where(is.character), str_trim),
+              across(where(is.character), str_squish))
 
 # Exemplos de str_extract()
 # Linha 08 - Jardim Silveira, Linha 09 - Grajaú
