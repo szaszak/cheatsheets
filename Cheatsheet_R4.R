@@ -298,6 +298,12 @@ df %>% mutate_all(., ~replace(., is.na(.), 0))
 # Remover todas as colunas que só possuem valor NA
 df <- df %>% select(!where(~ all(is.na(.))))
 
+# Remover todas as colunas que estão presentes em dois dataframes, exceto a selecionada
+# ...quando não há colunas específicas a um df (as colunas a serem excluídas estão presentes nos dois dfs)
+df1 %>% select(-names(df2)[names(df2) != "sql"]) 
+ # ...quando há colunas específicas a um df (um dos dfs possui colunas que o outro não tem)
+df2 %>% select(-any_of(setdiff(intersect(names(df1), names(df2)), "imagepath")))
+
 # Criar coluna de total a partir de colunas que correspondem a um padrão
 df %>% mutate(total = rowSums(across(starts_with("classe_"))))
 
